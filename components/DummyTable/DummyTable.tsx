@@ -41,17 +41,17 @@ const DummyTable = (): JSX.Element => {
   const deleteBtnClickHandler = useCallback((e: React.MouseEvent) => {
     const removedId = e.currentTarget.dataset.id
     setRemovingId(removedId)
-  })
+  }, [])
 
   const removeColumnHandler = useCallback(() => {
     const newRows = rows.filter((row) => row.id !== idToRemove)
     setRows(newRows)
     setRemovingId(null)
-  })
+  }, [])
 
   const cancelRemovingHandler = useCallback(() => {
     setRemovingId(null)
-  })
+  }, [])
 
   return (
     <>

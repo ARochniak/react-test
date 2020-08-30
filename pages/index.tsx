@@ -15,18 +15,18 @@ const Home = (): JSX.Element => {
     if (isError) setIsError(false)
     const username = e.currentTarget.value
     setUsername(username)
-  })
+  }, [])
 
   const passwordChangeHandler = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
     const password = e.currentTarget.value
     setPassword(password)
-  })
+  }, [])
 
   const errorHandler = useCallback(() => {
     setIsError(true)
     usernameInputRef.current.focus()
     usernameInputRef.current.setSelectionRange(0, usernameInputRef.current.value.length)
-  })
+  }, [])
 
   const submitHandler = useCallback(async (): void => {
     const body = JSON.stringify({ username, password })
@@ -38,12 +38,12 @@ const Home = (): JSX.Element => {
     } else {
       errorHandler()
     }
-  })
+  }, [])
 
   const keyDownHandler = useCallback((e: React.KeyboardEvent) => {
     if (e.key !== 'Enter' || (e.target as HTMLElement).tagName === 'BUTTON') return
     submitHandler()
-  })
+  }, [])
 
   return (
     <Grid container spacing={0} direction="column" alignItems="center" justify="center" style={{ minHeight: '100vh' }}>
