@@ -47,7 +47,7 @@ const DummyTable = (): JSX.Element => {
     const newRows = rows.filter((row) => row.id !== idToRemove)
     setRows(newRows)
     setRemovingId(null)
-  }, [])
+  }, [rows, idToRemove])
 
   const cancelRemovingHandler = useCallback(() => {
     setRemovingId(null)

@@ -11,11 +11,14 @@ const Home = (): JSX.Element => {
 
   const usernameInputRef = useRef<HTMLInputElement>()
 
-  const userNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isError) setIsError(false)
-    const username = e.currentTarget.value
-    setUsername(username)
-  }, [])
+  const userNameChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (isError) setIsError(false)
+      const username = e.currentTarget.value
+      setUsername(username)
+    },
+    [isError]
+  )
 
   const passwordChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.currentTarget.value
@@ -28,22 +31,28 @@ const Home = (): JSX.Element => {
     usernameInputRef.current.setSelectionRange(0, usernameInputRef.current.value.length)
   }, [])
 
-  const submitHandler = useCallback(async (): Promise<any> => {
-    const body = JSON.stringify({ username, password })
-    const response = await fetch('http://localhost:3000/api/login', { method: 'POST', body })
-    if (response.ok) {
-      const json: { token: string } = await response.json()
-      localStorage.setItem('token', json.token)
-      router.push('/table')
-    } else {
-      errorHandler()
+  const submitHandler = useCallback(() => {
+    async function login() {
+      const body = JSON.stringify({ username, password })
+      const response = await fetch('http://localhost:3000/api/login', { method: 'POST', body })
+      if (response.ok) {
+        const json: { token: string } = await response.json()
+        localStorage.setItem('token', json.token)
+        router.push('/table')
+      } else {
+        errorHandler()
+      }
     }
-  }, [])
+    login()
+  }, [username, password])
 
-  const keyDownHandler = useCallback((e: React.KeyboardEvent) => {
-    if (e.key !== 'Enter' || (e.target as HTMLElement).tagName === 'BUTTON') return
-    submitHandler()
-  }, [])
+  const keyDownHandler = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key !== 'Enter' || (e.target as HTMLElement).tagName === 'BUTTON') return
+      submitHandler()
+    },
+    [submitHandler]
+  )
 
   return (
     <Grid container spacing={0} direction="column" alignItems="center" justify="center" style={{ minHeight: '100vh' }}>
