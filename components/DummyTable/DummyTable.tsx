@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import { Button } from '@material-ui/core'
+import Popup from '../Popup'
 
 import { useRouter } from 'next/router'
 
@@ -17,6 +18,7 @@ interface Row {
 
 const DummyTable = (): JSX.Element => {
   const [rows, setRows] = useState([])
+  const [idToRemove, setRemovingId] = useState<null | string>(null)
 
   const router = useRouter()
 
@@ -36,44 +38,58 @@ const DummyTable = (): JSX.Element => {
     fetchRows()
   }, [])
 
-  const deleteRowHandler = useCallback((e: React.MouseEvent) => {
+  const deleteBtnClickHandler = useCallback((e: React.MouseEvent) => {
     const removedId = e.currentTarget.dataset.id
-    const newRows = rows.filter((row) => row.id !== removedId)
+    setRemovingId(removedId)
+  })
+
+  const removeColumnHandler = useCallback(() => {
+    const newRows = rows.filter((row) => row.id !== idToRemove)
     setRows(newRows)
+    setRemovingId(null)
+  })
+
+  const cancelRemovingHandler = useCallback(() => {
+    setRemovingId(null)
   })
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">ID</TableCell>
-            <TableCell align="center">Title</TableCell>
-            <TableCell align="center">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.title}</TableCell>
-              <TableCell align="center">
-                <Button
-                  type="button"
-                  onClick={deleteRowHandler}
-                  size="small"
-                  variant="outlined"
-                  color="secondary"
-                  data-id={row.id}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+    <>
+      {idToRemove && (
+        <Popup removeHandler={removeColumnHandler} cancelHandler={cancelRemovingHandler} title="Remove row?" />
+      )}
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">ID</TableCell>
+              <TableCell align="center">Title</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.title}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    type="button"
+                    onClick={deleteBtnClickHandler}
+                    size="small"
+                    variant="outlined"
+                    color="secondary"
+                    data-id={row.id}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }
 
