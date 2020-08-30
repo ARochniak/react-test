@@ -38,7 +38,7 @@ const DummyTable = (): JSX.Element => {
     fetchRows()
   }, [])
 
-  const deleteBtnClickHandler = useCallback((e: React.MouseEvent) => {
+  const deleteBtnClickHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const removedId = e.currentTarget.dataset.id
     setRemovingId(removedId)
   }, [])

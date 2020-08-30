@@ -11,13 +11,13 @@ const Home = (): JSX.Element => {
 
   const usernameInputRef = useRef<HTMLInputElement>()
 
-  const userNameChangeHandler = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+  const userNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (isError) setIsError(false)
     const username = e.currentTarget.value
     setUsername(username)
   }, [])
 
-  const passwordChangeHandler = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+  const passwordChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.currentTarget.value
     setPassword(password)
   }, [])
@@ -28,7 +28,7 @@ const Home = (): JSX.Element => {
     usernameInputRef.current.setSelectionRange(0, usernameInputRef.current.value.length)
   }, [])
 
-  const submitHandler = useCallback(async (): void => {
+  const submitHandler = useCallback(async (): Promise<any> => {
     const body = JSON.stringify({ username, password })
     const response = await fetch('http://localhost:3000/api/login', { method: 'POST', body })
     if (response.ok) {
