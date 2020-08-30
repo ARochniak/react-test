@@ -45,7 +45,10 @@
         "allow": ["warn", "error"]
       }
     ],
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "prettier/prettier": ["error", {
+     "endOfLine":"auto"
+   }]
   },
   "settings": {
     "react": {
